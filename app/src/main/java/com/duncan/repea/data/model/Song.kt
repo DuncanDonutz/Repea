@@ -1,5 +1,7 @@
 package com.duncan.repea.data.model
 
+// Song data object
+
 class Song {
     var id: String? = null
     var artist: String? = null
@@ -12,6 +14,7 @@ class Song {
         if (obj !is Song) {
             return false
         }
-        return id === obj.id && duration == obj.duration || (duration == obj.duration  && title == obj.title && artist == obj.artist)
+        // Return eliminates duplicate songs
+        return id === obj.id && duration == obj.duration || (duration == obj.duration && title == obj.title && artist == obj.artist)
     }
 }
