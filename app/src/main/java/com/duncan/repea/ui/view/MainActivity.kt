@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 if (requestCall.status == Constants.STOPPED) {
                     song.isPlaying = false
                     refreshRecyclerView(song.isPlaying)
-                    playBtn!!.setImageResource(android.R.drawable.ic_media_play)
+                    playBtn!!.setImageResource(R.drawable.ic_play)
                     waveLineView.stopAnim()
                 }
             })
@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                     song.isPlaying = true
                     SONG_POSITION = getPosition(song)
                     refreshRecyclerView(song.isPlaying)
-                    playBtn!!.setImageResource(android.R.drawable.ic_media_pause)
+                    playBtn!!.setImageResource(R.drawable.ic_pause)
                     waveLineView.startAnim()
                     updateSongProgress()
                 }
@@ -266,7 +266,7 @@ class MainActivity : AppCompatActivity() {
             currentSongTV.text=currentSong!!.title
             currentSongTV.marqueeRepeatLimit = -1
         }else{
-            currentSongTV.text="Breeze Music Player"
+            currentSongTV.text="Repea"
         }
     }
 
@@ -291,21 +291,21 @@ class MainActivity : AppCompatActivity() {
                 //binding.root.setBackgroundColor(color)
                 mb.titleTV.text = song.title
                 if (song.isPlaying && !hasFinished) {
-                    mb.playBtn.setImageResource(android.R.drawable.ic_media_pause)
-                    mb.titleTV.setTextColor(Color.BLUE)
+                    mb.playBtn.setImageResource(R.drawable.ic_pause)
+                    mb.titleTV.setTextColor(Color.WHITE)
                     mb.titleTV.setTypeface(null, Typeface.ITALIC)
                 } else {
-                    mb.playBtn.setImageResource(android.R.drawable.ic_media_play)
+                    mb.playBtn.setImageResource(R.drawable.ic_play)
                     mb.titleTV.setTextColor(Color.BLACK)
                     mb.titleTV.setTypeface(null, Typeface.NORMAL)
                     if (hasFinished) {
-                        mb.playBtn.setImageResource(android.R.drawable.ic_media_play)
+                        mb.playBtn.setImageResource(R.drawable.ic_play)
                         mb.titleTV.setTextColor(Color.BLACK)
                         mb.titleTV.setTypeface(null, Typeface.NORMAL)
                     } else {
                         if (currentSong != null && currentSong!!.id === song.id) {
-                            mb.playBtn.setImageResource(android.R.drawable.ic_media_play)
-                            mb.titleTV.setTextColor(Color.RED)
+                            mb.playBtn.setImageResource(R.drawable.ic_play)
+                            mb.titleTV.setTextColor(Color.WHITE)
                             mb.titleTV.setTypeface(null, Typeface.NORMAL)
                         }
                     }
