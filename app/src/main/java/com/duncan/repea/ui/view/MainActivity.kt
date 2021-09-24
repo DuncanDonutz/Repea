@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             // No explanation needed, we can request the permission.
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                 MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
-            show("Hey Please grant this app the permission to read external storage first")
+            show("Please allow external storage access")
         } else {
             fetchAllSongs()
         }
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                     // permission was granted, yay! Do the
                     // SONGS related task you need to do.
                 } else {
-                    show("Please grant us permission to read external storage so that we load songs")
+                    show("Please allow external storage access")
                 }
                 return
             }
