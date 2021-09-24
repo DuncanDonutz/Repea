@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.WindowManager
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     var adapter: PolluxAdapter<Song>? = null
     private var sv: SongsViewModel? = null
 
+
     var SONG_POSITION = 0
     var SONGS_CACHE = ArrayList<Song>()
     var playbackParams = PlaybackParams()
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initializeViews() {
         songsRV!!.layoutManager = LinearLayoutManager(this)
+        progressSPD.isEnabled = false
 
     }
 
@@ -147,8 +150,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun playOrPause(song: Song) {
         currentSong = song
         if (player == null) {
@@ -164,6 +165,7 @@ class MainActivity : AppCompatActivity() {
         if (player!!.isPlaying) {
             sv!!.pause(player, this, song).observe(this, Observer { requestCall: SongDao ->
                 if (requestCall.status == Constants.STOPPED) {
+                    progressSPD.isEnabled = false
                     song.isPlaying = false
                     refreshRecyclerView(song.isPlaying)
                     playBtn!!.setImageResource(R.drawable.ic_play)
@@ -173,6 +175,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             sv!!.play(player, this, song).observe(this, Observer { requestCall: SongDao ->
                 if (requestCall.status == Constants.PLAYING) {
+                    progressSPD.isEnabled = true
                     song.isPlaying = true
                     SONG_POSITION = getPosition(song)
                     refreshRecyclerView(song.isPlaying)
@@ -202,6 +205,11 @@ class MainActivity : AppCompatActivity() {
                 SONG_POSITION = 0
             }
             cleanUpMediaPlayer()
+
+            //keeps speedSeek at 100 when skipping
+            findViewById<TextView>(R.id.speedPercentage).text = "100"
+            progressSPD.progress = 100
+
             val nextSong: Song = SONGS_CACHE.get(SONG_POSITION)
             playOrPause(nextSong)
         }
@@ -215,13 +223,18 @@ class MainActivity : AppCompatActivity() {
                     SONG_POSITION = 0
                 }
             }
+
+            //keeps speedSeek at 100 when skipping
+            findViewById<TextView>(R.id.speedPercentage).text = "100"
+            progressSPD.progress = 100
+
             val prevSong: Song = SONGS_CACHE[SONG_POSITION]
             cleanUpMediaPlayer()
             playOrPause(prevSong)
         }
         progressSB!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                if (b) {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
                     if (player == null) {
                         show("Please add some songs to Play")
                         return
@@ -233,7 +246,7 @@ class MainActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        speedSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        progressSPD!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     var speedPercentage = findViewById<TextView>(R.id.speedPercentage)
@@ -393,11 +406,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //keeps screen from locking
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         sv = ViewModelProvider(this).get(SongsViewModel::class.java)
         initializeViews()
         handleEvents()
-
-
     }
 
     override fun onResume() {

@@ -79,7 +79,7 @@
                     android:layout_gravity="center"/>
 
                 <SeekBar
-                    android:id="@+id/speedSeek"
+                    android:id="@+id/progressSPD"
                     android:max="150"
                     android:min="50"
                     android:progress="100"
