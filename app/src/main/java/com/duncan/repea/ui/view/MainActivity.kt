@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
             val linkedHashSet = LinkedHashSet(requestCall.songs)
             SONGS_CACHE.clear()
             SONGS_CACHE.addAll(linkedHashSet)
+            SONGS_CACHE.sortWith(compareBy({it.title}))
             if (currentSong == null && SONGS_CACHE.size > 0) {
                 currentSong = SONGS_CACHE.get(0)
             }
@@ -292,20 +293,20 @@ class MainActivity : AppCompatActivity() {
                 mb.titleTV.text = song.title
                 if (song.isPlaying && !hasFinished) {
                     mb.playBtn.setImageResource(R.drawable.ic_pause)
-                    mb.titleTV.setTextColor(Color.WHITE)
-                    mb.titleTV.setTypeface(null, Typeface.ITALIC)
+                    mb.titleTV.setTextColor(Color.rgb(203,167,255))
+                    mb.titleTV.setTypeface(null, Typeface.BOLD_ITALIC)
                 } else {
                     mb.playBtn.setImageResource(R.drawable.ic_play)
-                    mb.titleTV.setTextColor(Color.BLACK)
+                    mb.titleTV.setTextColor(Color.GRAY)
                     mb.titleTV.setTypeface(null, Typeface.NORMAL)
                     if (hasFinished) {
                         mb.playBtn.setImageResource(R.drawable.ic_play)
-                        mb.titleTV.setTextColor(Color.BLACK)
+                        mb.titleTV.setTextColor(Color.GRAY)
                         mb.titleTV.setTypeface(null, Typeface.NORMAL)
                     } else {
                         if (currentSong != null && currentSong!!.id === song.id) {
                             mb.playBtn.setImageResource(R.drawable.ic_play)
-                            mb.titleTV.setTextColor(Color.WHITE)
+                            mb.titleTV.setTextColor(Color.rgb(203,167,255))
                             mb.titleTV.setTypeface(null, Typeface.NORMAL)
                         }
                     }

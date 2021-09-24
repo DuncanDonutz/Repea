@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Repea</string>
+    <string name="please_select_a_song">Please Select a Song</string>
+    <string name="speed">Speed</string>
 </resources>

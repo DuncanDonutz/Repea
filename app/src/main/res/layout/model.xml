@@ -4,30 +4,40 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/songCard"
-        app:cardBackgroundColor="#5A00FF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#404040"
+        app:cardCornerRadius="16dp">
+
+
 
         <!--android:background="#00bcd4"-->
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:padding="5dp">
+            android:padding="5dp"
+            >
+
 
             <ImageButton
                 android:id="@+id/playBtn"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="25dp"
+                android:layout_width="356dp"
                 android:layout_height="25dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:background="#5E5E5E"
+                android:background="#005E5E5E"
                 android:foregroundGravity="center_vertical"
                 android:src="@drawable/ic_play"
-                app:tint="@color/teal_200" />
+                app:tint="#CBA7FF" />
+
+
 
 
             <TextView
@@ -46,6 +56,7 @@
 
 
         </LinearLayout>
+
 
     </androidx.cardview.widget.CardView>
 </layout>
