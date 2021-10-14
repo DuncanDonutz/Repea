@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.Animation
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -43,26 +44,18 @@ class MainActivity : AppCompatActivity() {
 
 
     var SONG_POSITION = 0
+    var seekForward = 10000
+    var seekBackward = 10000
     var SONGS_CACHE = ArrayList<Song>()
     var playbackParams = PlaybackParams()
 
-    /**
-     * Now we need method to reference our UI components defined in our XML.This prepares them for use.
-     *
-     */
     private fun initializeViews() {
         songsRV!!.layoutManager = LinearLayoutManager(this)
         progressSPD.isEnabled = false
 
     }
 
-    /**
-     * If you are given a song object, can you give us it's position. We may need that position
-     * so that we know the next song in our playlist. Yes, the following method provides you the position.
-     * @param s
-     * @return
-     */
-
+    // Get song position in cache
     private fun getPosition(s: Song?): Int {
         val pos = 0
         for (song in SONGS_CACHE) {
@@ -72,10 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
         return pos
     }
-    /**
-     * Instantiating media player
-     * @return
-     */
+
     private val player: MediaPlayer?
         private get() {
             if (mMediaPlayer == null) {
@@ -90,10 +80,8 @@ class MainActivity : AppCompatActivity() {
             }
             return mMediaPlayer
         }
-    /**
-     * The following method cleans up the mediaplayer, releasing it's resources from the memory.
-     */
 
+    // Releases mediaplayer resources from memory
     private fun cleanUpMediaPlayer() {
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
@@ -102,46 +90,43 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /**
-     * Fetching all songs from the user's device
-     */
     private fun fetchAllSongs() {
         sv!!.loadAllSongs(this).observe(this, Observer { requestCall: SongDao ->
             val linkedHashSet = LinkedHashSet(requestCall.songs)
             SONGS_CACHE.clear()
             SONGS_CACHE.addAll(linkedHashSet)
-            SONGS_CACHE.sortWith(compareBy({it.title}))
+            SONGS_CACHE.sortWith(compareBy({ it.title }))
             if (currentSong == null && SONGS_CACHE.size > 0) {
                 currentSong = SONGS_CACHE.get(0)
             }
         })
     }
-    /**
-     * Becausewe are reading songs from the user's device, we need to ask the user for permissions
-     * first at runtime.
-     */
+
     private fun checkPermissionsThenLoadSongs() {
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
-            // No explanation needed, we can request the permission.
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+            )
             show("Please allow external storage access")
         } else {
             fetchAllSongs()
         }
     }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantedResults: IntArray) {
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantedResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantedResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
                 if (grantedResults.size > 0
-                    && grantedResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    && grantedResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
                     fetchAllSongs()
-                    // permission was granted, yay! Do the
-                    // SONGS related task you need to do.
                 } else {
                     show("Please allow external storage access")
                 }
@@ -153,13 +138,13 @@ class MainActivity : AppCompatActivity() {
     private fun playOrPause(song: Song) {
         currentSong = song
         if (player == null) {
-            show("You don't have any song to play.Please add some songs first")
+            show("Please add songs")
             return
         }
         hasFinished = false
-        try{
+        try {
             songsRV.smoothScrollToPosition(getPosition(song))
-        }catch (e: Exception){
+        } catch (e: Exception) {
 
         }
         if (player!!.isPlaying) {
@@ -187,17 +172,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * We need to handle various click events. Let's wrap those event handlers under one roof.
-     */
     private fun handleEvents() {
         playBtn!!.setOnClickListener {
             if (currentSong != null) {
                 playOrPause(currentSong!!)
             } else {
-                show("Please add some songs first")
+                show("Please add songs")
             }
         }
+
         nextBtn!!.setOnClickListener {
             refreshRecyclerView(false)
             SONG_POSITION = getPosition(currentSong) + 1
@@ -213,6 +196,18 @@ class MainActivity : AppCompatActivity() {
             val nextSong: Song = SONGS_CACHE.get(SONG_POSITION)
             playOrPause(nextSong)
         }
+
+        fastForwardBtn!!.setOnClickListener {
+            refreshRecyclerView(false)
+            SONG_POSITION = mMediaPlayer!!.currentPosition
+
+            if (SONG_POSITION + seekForward <= mMediaPlayer!!.duration) {
+                mMediaPlayer!!.seekTo(SONG_POSITION + seekForward)
+            } else {
+                mMediaPlayer!!.seekTo(mMediaPlayer!!.duration)
+            }
+        }
+
         prevBtn!!.setOnClickListener {
             refreshRecyclerView(false)
             SONG_POSITION--
@@ -232,20 +227,38 @@ class MainActivity : AppCompatActivity() {
             cleanUpMediaPlayer()
             playOrPause(prevSong)
         }
+
+        rewindBtn!!.setOnClickListener {
+            refreshRecyclerView(false)
+            SONG_POSITION = mMediaPlayer!!.currentPosition
+
+            if (SONG_POSITION - seekBackward <= mMediaPlayer!!.duration) {
+                mMediaPlayer!!.seekTo(SONG_POSITION - seekBackward)
+            } else {
+                mMediaPlayer!!.seekTo(0)
+            }
+        }
+
         progressSB!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     if (player == null) {
-                        show("Please add some songs to Play")
+                        show("Please add songs")
                         return
                     }
-                    mMediaPlayer!!.seekTo(sv!!.getTimeFromProgress(seekBar.progress, player!!.duration))
+                    mMediaPlayer!!.seekTo(
+                        (sv!!.getTimeFromProgress(
+                            seekBar.progress,
+                            player!!.duration
+                        ))
+                    )
                 }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+
         progressSPD!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -262,51 +275,34 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
-
-    /**
-     * The following method will:
-     * 1. Refresh our adapter. This enables us to highlight the correct playing song in our UI.
-     * @param playing
-     */
     private fun refreshRecyclerView(playing: Boolean) {
-        if(currentSong != null && SONGS_CACHE.size > 0){
+        if (currentSong != null && SONGS_CACHE.size > 0) {
             currentSong!!.isPlaying = playing
-            val s=SONGS_CACHE.find { it.id == currentSong!!.id }
-            if(s != null){
+            val s = SONGS_CACHE.find { it.id == currentSong!!.id }
+            if (s != null) {
                 SONGS_CACHE[getPosition(s)] = currentSong!!
             }
             adapter!!.notifyDataSetChanged()
-            currentSongTV.text=currentSong!!.title
+            currentSongTV.text = currentSong!!.title
             currentSongTV.marqueeRepeatLimit = -1
-        }else{
-            currentSongTV.text="Repea"
+        } else {
+            currentSongTV.text = "Repea"
         }
     }
 
 
-
-    /**
-     * Showing a toast message
-     * @param message
-     */
+    //toast
     private fun show(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    /**
-     * Setting up a recyclerview
-     * @param songs
-     */
     private fun setupRecycler(songs: ArrayList<Song>) {
         adapter =
             PolluxAdapter.with<Song, ModelBinding>(R.layout.model) { adapterPosition, song, mb ->
-                //val color = mMaterialColors[Random().nextInt(mMaterialColors.size)]
-                //binding.root.setBackgroundColor(color)
                 mb.titleTV.text = song.title
                 if (song.isPlaying && !hasFinished) {
                     mb.playBtn.setImageResource(R.drawable.ic_pause)
-                    mb.titleTV.setTextColor(Color.rgb(203,167,255))
+                    mb.titleTV.setTextColor(Color.rgb(203, 167, 255))
                     mb.titleTV.setTypeface(null, Typeface.BOLD_ITALIC)
                 } else {
                     mb.playBtn.setImageResource(R.drawable.ic_play)
@@ -319,7 +315,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         if (currentSong != null && currentSong!!.id === song.id) {
                             mb.playBtn.setImageResource(R.drawable.ic_play)
-                            mb.titleTV.setTextColor(Color.rgb(203,167,255))
+                            mb.titleTV.setTextColor(Color.rgb(203, 167, 255))
                             mb.titleTV.setTypeface(null, Typeface.NORMAL)
                         }
                     }
@@ -333,8 +329,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         SONG_POSITION = getPosition(song)
-                        if(currentSong != null){
-                            currentSong!!.isPlaying=false
+                        if (currentSong != null) {
+                            currentSong!!.isPlaying = false
                             adapter!!.notifyDataSetChanged()
                         }
                         currentSong = SONGS_CACHE.get(SONG_POSITION)
@@ -361,15 +357,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        songsRV.layoutManager= GridLayoutManager(this@MainActivity,2)
+        songsRV.layoutManager = GridLayoutManager(this@MainActivity, 2)
         adapter!!.addAll(songs)
         songsRV!!.adapter = adapter
     }
-
-
-
-
-
 
 
     private fun updateSongProgress() {
@@ -379,7 +370,7 @@ class MainActivity : AppCompatActivity() {
     private var runnable: Runnable = object : Runnable {
         override fun run() {
             if (!hasFinished) {
-                if(mMediaPlayer == null){
+                if (mMediaPlayer == null) {
                     return
                 }
                 val currentDuration = mMediaPlayer!!.currentPosition
@@ -391,8 +382,6 @@ class MainActivity : AppCompatActivity() {
                     playBtn!!.setImageResource(android.R.drawable.ic_media_play)
                     hasFinished = true
                     adapter!!.notifyDataSetChanged()
-                    //                    show("Finished");
-                    //Click Next to play next song
                     nextBtn!!.performClick()
                 } else {
                     hasFinished = false
@@ -416,7 +405,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(SONGS_CACHE.isEmpty()){
+        if (SONGS_CACHE.isEmpty()) {
             checkPermissionsThenLoadSongs()
             setupRecycler(SONGS_CACHE)
         }
@@ -424,7 +413,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if(currentSong != null && currentSong!!.isPlaying){
+        if (currentSong != null && currentSong!!.isPlaying) {
             currentSong!!.isPlaying = false
             playOrPause(currentSong!!)
         }
