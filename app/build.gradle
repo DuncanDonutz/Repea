@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    // Set minifyEnabled to true before release
+    // Set minifyEnabled to true before release!
     buildTypes {
         release {
             minifyEnabled false

@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            //keeps speedSeek at 100 when skipping
+            // Keeps speedSeek at 100 when skipping
             findViewById<TextView>(R.id.speedPercentage).text = "100"
             progressSPD.progress = 100
 
@@ -339,6 +339,9 @@ class MainActivity : AppCompatActivity() {
                         mb.playBtn.setImageResource(android.R.drawable.ic_media_pause)
                         mb.titleTV.setTextColor(Color.GREEN)
                         mb.titleTV.setTypeface(null, Typeface.ITALIC)
+                        // Keeps speedSeek at 100 when changing songs
+                        findViewById<TextView>(R.id.speedPercentage).text = "100"
+                        progressSPD.progress = 100
 
                     } else {
                         if (SONG_POSITION != getPosition(song)) {
@@ -353,7 +356,6 @@ class MainActivity : AppCompatActivity() {
                         mb.playBtn.setImageResource(android.R.drawable.ic_media_play)
                         mb.titleTV.setTextColor(Color.RED)
                         mb.titleTV.setTypeface(null, Typeface.ITALIC)
-                        //adapter!!.notifyDataSetChanged()
                     }
                 }
             }
@@ -395,7 +397,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //keeps screen from locking
+        // Keeps screen from locking
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         sv = ViewModelProvider(this).get(SongsViewModel::class.java)
