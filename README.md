@@ -1,25 +1,17 @@
 # Repea
 
-<img src="/readme/wallabag logo.png" align="left"
+<img src="https://user-images.githubusercontent.com/86330277/137247388-a2aeaf02-abd2-4df6-bd0f-18458e5c0c17.png" align="left"
 width="200" hspace="10" vspace="10">
 
-Repea is a language learning app allowing users to practice speaking any language with a conversation of their choice
-
 ## About
-
-
+Repea is a language learning app that allows users to practice speaking any language through [shadowing](https://en.wikipedia.org/wiki/Speech_shadowing). Shadowing a language learning technique which can be very effective. I concept is simple, listen to conversations in the language you are studying and repeat what they say in real time. However, sometimes native conversations can be too fast for language learners to understand. Repea represnts an simple way for people to slow down conversations to practice with, while increasing the speed over time to improve.
 
 ## Features
 
 The android app lets you:
-- Connect to your self-hosted wallabag instance or connect to your [wallabag.it](https://wallabag.it) or [Framabag](https://framabag.org) account.
-- Supports wallabag 2.0 and higher.
-- Completely ad-free.
-- Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
-- Switch between numerous themes.
-- Possibility to cache images locally for offline reading.
-- Get articles read via Text-to-Speech feature.
-- Needs no special permissions on Android 6.0+.
+- Access and play audio files on your phone
+- Adjust the speed to suit your speaking level
+- Record conversations from your favorite anime, television show, or movie to practice with (coming soon)
 
 ## Screenshots
 
