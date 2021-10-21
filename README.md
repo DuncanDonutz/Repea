@@ -21,3 +21,6 @@ width="300"
  
 ## Current issues
 - Upon first installation, the song list doesn't show up for some. Simply restart the app and the songs will be displayed properly from then on
+
+## Acknowledgements
+- Additional visual design by Nathan Johnson
