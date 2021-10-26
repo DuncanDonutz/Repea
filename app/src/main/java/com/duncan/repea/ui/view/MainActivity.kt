@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
 
     var SONG_POSITION = 0
-    var seekForward = 10000
-    var seekBackward = 10000
+    var seekForward = 5000
+    var seekBackward = 5000
     var SONGS_CACHE = ArrayList<Song>()
     var playbackParams = PlaybackParams()
 
