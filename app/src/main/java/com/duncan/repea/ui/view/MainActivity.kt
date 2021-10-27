@@ -42,11 +42,10 @@ class MainActivity : AppCompatActivity() {
     var adapter: PolluxAdapter<Song>? = null
     private var sv: SongsViewModel? = null
 
-
     var SONG_POSITION = 0
+    var SONGS_CACHE = ArrayList<Song>()
     var SEEK_FORWARD = 5000
     var SEEK_BACKWARD = 5000
-    var SONGS_CACHE = ArrayList<Song>()
     var playbackParams = PlaybackParams()
 
     private fun initializeViews() {
@@ -290,7 +289,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     //toast
     private fun show(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -364,7 +362,6 @@ class MainActivity : AppCompatActivity() {
         songsRV!!.adapter = adapter
     }
 
-
     private fun updateSongProgress() {
         mHandler.postDelayed(runnable, 1000)
     }
@@ -411,7 +408,6 @@ class MainActivity : AppCompatActivity() {
             checkPermissionsThenLoadSongs()
         }
         setupRecycler(SONGS_CACHE)
-
     }
 
     override fun onPause() {
