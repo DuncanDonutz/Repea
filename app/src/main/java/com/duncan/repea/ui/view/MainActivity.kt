@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
 
     var SONG_POSITION = 0
-    var seekForward = 5000
-    var seekBackward = 5000
+    var SEEK_FORWARD = 5000
+    var SEEK_BACKWARD = 5000
     var SONGS_CACHE = ArrayList<Song>()
     var playbackParams = PlaybackParams()
 
@@ -201,8 +201,8 @@ class MainActivity : AppCompatActivity() {
             refreshRecyclerView(false)
             SONG_POSITION = mMediaPlayer!!.currentPosition
 
-            if (SONG_POSITION + seekForward <= mMediaPlayer!!.duration) {
-                mMediaPlayer!!.seekTo(SONG_POSITION + seekForward)
+            if (SONG_POSITION + SEEK_FORWARD <= mMediaPlayer!!.duration) {
+                mMediaPlayer!!.seekTo(SONG_POSITION + SEEK_FORWARD)
             } else {
                 mMediaPlayer!!.seekTo(mMediaPlayer!!.duration)
             }
@@ -232,8 +232,8 @@ class MainActivity : AppCompatActivity() {
             refreshRecyclerView(false)
             SONG_POSITION = mMediaPlayer!!.currentPosition
 
-            if (SONG_POSITION - seekBackward <= mMediaPlayer!!.duration) {
-                mMediaPlayer!!.seekTo(SONG_POSITION - seekBackward)
+            if (SONG_POSITION - SEEK_BACKWARD <= mMediaPlayer!!.duration) {
+                mMediaPlayer!!.seekTo(SONG_POSITION - SEEK_BACKWARD)
             } else {
                 mMediaPlayer!!.seekTo(0)
             }
@@ -409,8 +409,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         if (SONGS_CACHE.isEmpty()) {
             checkPermissionsThenLoadSongs()
-            setupRecycler(SONGS_CACHE)
         }
+        setupRecycler(SONGS_CACHE)
+
     }
 
     override fun onPause() {
