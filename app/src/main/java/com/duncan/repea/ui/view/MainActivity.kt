@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity() {
             mMediaPlayer!!.release()
             mMediaPlayer = null
         }
-
     }
 
     private fun fetchAllSongs() {
@@ -188,7 +187,7 @@ class MainActivity : AppCompatActivity() {
             }
             cleanUpMediaPlayer()
 
-            //keeps speedSeek at 100 when skipping
+            // Keeps speedSeek at 100 when skipping
             findViewById<TextView>(R.id.speedPercentage).text = "100"
             progressSPD.progress = 100
 
@@ -217,7 +216,6 @@ class MainActivity : AppCompatActivity() {
                     SONG_POSITION = 0
                 }
             }
-
             // Keeps speedSeek at 100 when skipping
             findViewById<TextView>(R.id.speedPercentage).text = "100"
             progressSPD.progress = 100
@@ -253,7 +251,6 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
@@ -268,7 +265,6 @@ class MainActivity : AppCompatActivity() {
                     mMediaPlayer!!.playbackParams = mMediaPlayer!!.playbackParams!!.setSpeed(speed)
                 }
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
@@ -285,11 +281,11 @@ class MainActivity : AppCompatActivity() {
             currentSongTV.text = currentSong!!.title
             currentSongTV.marqueeRepeatLimit = -1
         } else {
-            currentSongTV.text = "Repea"
+            currentSongTV.text = "Song"
         }
     }
 
-    //toast
+    // Toast
     private fun show(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -318,6 +314,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 mb.playBtn.setOnClickListener { view: View? ->
                     if (!song.isPlaying) {
                         if (SONG_POSITION != getPosition(song)) {
@@ -340,7 +337,6 @@ class MainActivity : AppCompatActivity() {
                         // Keeps speedSeek at 100 when changing songs
                         findViewById<TextView>(R.id.speedPercentage).text = "100"
                         progressSPD.progress = 100
-
                     } else {
                         if (SONG_POSITION != getPosition(song)) {
                             if (mMediaPlayer != null) {
