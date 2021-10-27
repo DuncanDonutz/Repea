@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
     private fun initializeViews() {
         songsRV!!.layoutManager = LinearLayoutManager(this)
         progressSPD.isEnabled = false
-
     }
 
     // Get song position in cache
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             return mMediaPlayer
         }
 
-    // Releases mediaplayer resources from memory
+    // Releases mediaPlayer resources from memory
     private fun cleanUpMediaPlayer() {
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
