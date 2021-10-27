@@ -31,6 +31,8 @@ import com.duncan.repea.utilities.constants.Constants.MY_PERMISSIONS_REQUEST_REA
 import com.duncan.repea.R
 import info.camposha.pollux.PolluxAdapter
 import kotlinx.android.synthetic.main.content_home.*
+import kotlinx.android.synthetic.main.content_home.playBtn
+import kotlinx.android.synthetic.main.model.*
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -314,7 +316,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                mb.playBtn.setOnClickListener { view: View? ->
+                mb.titleTV.setOnClickListener { view: View? ->
                     if (!song.isPlaying) {
                         if (SONG_POSITION != getPosition(song)) {
                             if (mMediaPlayer != null) {
