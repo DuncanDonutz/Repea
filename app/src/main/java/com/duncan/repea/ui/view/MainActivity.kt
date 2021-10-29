@@ -169,72 +169,94 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+        refreshRecyclerView(true)
+    }
+
+    private fun play(){
+        if (currentSong != null) {
+            playOrPause(currentSong!!)
+        } else {
+            show("Please add songs")
+        }
+    }
+
+    private fun nextSong(){
+        refreshRecyclerView(false)
+        SONG_POSITION = getPosition(currentSong) + 1
+        if (SONG_POSITION >= SONGS_CACHE.size) {
+            SONG_POSITION = 0
+        }
+        cleanUpMediaPlayer()
+
+        // Keeps speedSeek at 100 when skipping
+        findViewById<TextView>(R.id.speedPercentage).text = "100"
+        progressSPD.progress = 100
+
+        val nextSong: Song = SONGS_CACHE.get(SONG_POSITION)
+        playOrPause(nextSong)
+    }
+
+    private fun  prevSong(){
+        refreshRecyclerView(false)
+        SONG_POSITION--
+        if (SONG_POSITION < 0) {
+            if (SONGS_CACHE.size > 0) {
+                SONG_POSITION = SONGS_CACHE.size - 1
+            } else {
+                SONG_POSITION = 0
+            }
+        }
+        // Keeps speedSeek at 100 when skipping
+        findViewById<TextView>(R.id.speedPercentage).text = "100"
+        progressSPD.progress = 100
+
+        val prevSong: Song = SONGS_CACHE[SONG_POSITION]
+        cleanUpMediaPlayer()
+        playOrPause(prevSong)
+    }
+
+    private fun fastForward(){
+        refreshRecyclerView(true)
+        SONG_POSITION = mMediaPlayer!!.currentPosition
+
+        if (SONG_POSITION + SEEK_FORWARD <= mMediaPlayer!!.duration) {
+            mMediaPlayer!!.seekTo(SONG_POSITION + SEEK_FORWARD)
+        } else {
+            mMediaPlayer!!.seekTo(mMediaPlayer!!.duration)
+        }
+
+    }
+
+    private fun rewind(){
+        refreshRecyclerView(true)
+        SONG_POSITION = mMediaPlayer!!.currentPosition
+
+        if (SONG_POSITION - SEEK_BACKWARD <= mMediaPlayer!!.duration) {
+            mMediaPlayer!!.seekTo(SONG_POSITION - SEEK_BACKWARD)
+        } else {
+            mMediaPlayer!!.seekTo(0)
+        }
     }
 
     private fun handleEvents() {
         playBtn!!.setOnClickListener {
-            if (currentSong != null) {
-                playOrPause(currentSong!!)
-            } else {
-                show("Please add songs")
-            }
+            play()
         }
 
         nextBtn!!.setOnClickListener {
-            refreshRecyclerView(false)
-            SONG_POSITION = getPosition(currentSong) + 1
-            if (SONG_POSITION >= SONGS_CACHE.size) {
-                SONG_POSITION = 0
-            }
-            cleanUpMediaPlayer()
-
-            // Keeps speedSeek at 100 when skipping
-            findViewById<TextView>(R.id.speedPercentage).text = "100"
-            progressSPD.progress = 100
-
-            val nextSong: Song = SONGS_CACHE.get(SONG_POSITION)
-            playOrPause(nextSong)
-        }
-
-        fastForwardBtn!!.setOnClickListener {
-            refreshRecyclerView(false)
-            SONG_POSITION = mMediaPlayer!!.currentPosition
-
-            if (SONG_POSITION + SEEK_FORWARD <= mMediaPlayer!!.duration) {
-                mMediaPlayer!!.seekTo(SONG_POSITION + SEEK_FORWARD)
-            } else {
-                mMediaPlayer!!.seekTo(mMediaPlayer!!.duration)
-            }
+            nextSong()
         }
 
         prevBtn!!.setOnClickListener {
-            refreshRecyclerView(false)
-            SONG_POSITION--
-            if (SONG_POSITION < 0) {
-                if (SONGS_CACHE.size > 0) {
-                    SONG_POSITION = SONGS_CACHE.size - 1
-                } else {
-                    SONG_POSITION = 0
-                }
-            }
-            // Keeps speedSeek at 100 when skipping
-            findViewById<TextView>(R.id.speedPercentage).text = "100"
-            progressSPD.progress = 100
+            prevSong()
+        }
 
-            val prevSong: Song = SONGS_CACHE[SONG_POSITION]
-            cleanUpMediaPlayer()
-            playOrPause(prevSong)
+        fastForwardBtn!!.setOnClickListener {
+            fastForward()
         }
 
         rewindBtn!!.setOnClickListener {
-            refreshRecyclerView(false)
-            SONG_POSITION = mMediaPlayer!!.currentPosition
-
-            if (SONG_POSITION - SEEK_BACKWARD <= mMediaPlayer!!.duration) {
-                mMediaPlayer!!.seekTo(SONG_POSITION - SEEK_BACKWARD)
-            } else {
-                mMediaPlayer!!.seekTo(0)
-            }
+            rewind()
         }
 
         progressSB!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
