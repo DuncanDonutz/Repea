@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
         }
         refreshRecyclerView(true)
     }
-    
+
     private fun nextSong(){
         refreshRecyclerView(false)
         SONG_POSITION = getPosition(currentSong) + 1
