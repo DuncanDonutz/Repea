@@ -171,15 +171,7 @@ class MainActivity : AppCompatActivity() {
         }
         refreshRecyclerView(true)
     }
-
-    private fun play(){
-        if (currentSong != null) {
-            playOrPause(currentSong!!)
-        } else {
-            show("Please add songs")
-        }
-    }
-
+    
     private fun nextSong(){
         refreshRecyclerView(false)
         SONG_POSITION = getPosition(currentSong) + 1
@@ -240,7 +232,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleEvents() {
         playBtn!!.setOnClickListener {
-            play()
+            playOrPause(currentSong!!)
         }
 
         nextBtn!!.setOnClickListener {
