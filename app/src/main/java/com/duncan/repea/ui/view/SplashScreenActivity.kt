@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import androidx.core.view.ViewCompat.animate
-import com.airbnb.lottie.LottieAnimationView
 import com.duncan.repea.R
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
@@ -14,8 +12,6 @@ class SplashScreenActivity : AppCompatActivity() {
     companion object {
         const val ANIMATION_TIME: Long = 1200
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
