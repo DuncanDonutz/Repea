@@ -12,10 +12,12 @@
         app:cardElevation="0dp">
 
         <LinearLayout
+            android:id="@+id/llCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
+            android:clickable="true"
             android:padding="5dp">
 
             <ImageButton
@@ -28,7 +30,8 @@
                 android:background="#005E5E5E"
                 android:foregroundGravity="center_vertical"
                 android:src="@drawable/ic_play"
-                app:tint="#CBA7FF" />
+                app:tint="#CBA7FF"
+                android:clickable="false"/>
 
             <TextView
                 android:id="@+id/titleTV"
@@ -41,7 +44,8 @@
                 android:text="Title"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:clickable="false"/>
 
         </LinearLayout>
 
