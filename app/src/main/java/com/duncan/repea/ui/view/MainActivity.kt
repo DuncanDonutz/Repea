@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private var hasFinished = false
     private var currentSong: Song? = null
+    private var currentSongId: String? = null
     var mMediaPlayer: MediaPlayer? = null
     var mHandler = Handler()
     var adapter: PolluxAdapter<Song>? = null
@@ -140,7 +141,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
         hasFinished = false
-        try {
+   try {
             songsRV.smoothScrollToPosition(getPosition(song))
         } catch (e: Exception) {
 
@@ -150,9 +151,11 @@ class MainActivity : AppCompatActivity() {
                 if (requestCall.status == Constants.STOPPED) {
                     progressSPD.isEnabled = false
                     song.isPlaying = false
+                    currentSongId = null
                     refreshRecyclerView(song.isPlaying)
                     playBtn!!.setImageResource(R.drawable.ic_play)
                     waveLineView.stopAnim()
+                    adapter!!.notifyDataSetChanged()
                 }
             })
         } else {
@@ -160,11 +163,13 @@ class MainActivity : AppCompatActivity() {
                 if (requestCall.status == Constants.PLAYING) {
                     progressSPD.isEnabled = true
                     song.isPlaying = true
+                    currentSongId = song.id
                     SONG_POSITION = getPosition(song)
                     refreshRecyclerView(song.isPlaying)
                     playBtn!!.setImageResource(R.drawable.ic_pause)
                     waveLineView.startAnim()
                     updateSongProgress()
+                    adapter!!.notifyDataSetChanged()
                 }
             })
         }
@@ -308,7 +313,7 @@ class MainActivity : AppCompatActivity() {
         adapter =
             PolluxAdapter.with<Song, ModelBinding>(R.layout.model) { adapterPosition, song, mb ->
                 mb.titleTV.text = song.title
-                if (song.isPlaying && !hasFinished) {
+                if (song.id == currentSongId) {
                     mb.playBtn.setImageResource(R.drawable.ic_pause)
                     mb.titleTV.setTextColor(Color.rgb(203, 167, 255))
                     mb.titleTV.setTypeface(null, Typeface.BOLD_ITALIC)
@@ -329,7 +334,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                mb.titleTV.setOnClickListener { view: View? ->
+                mb.llCard.setOnClickListener { view: View? ->
                     if (!song.isPlaying) {
                         if (SONG_POSITION != getPosition(song)) {
                             if (mMediaPlayer != null) {
