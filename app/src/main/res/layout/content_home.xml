@@ -8,12 +8,10 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
@@ -27,7 +25,6 @@
             android:gravity="center_horizontal"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
-
             android:singleLine="true"
             android:text="@string/please_select_a_song"
             android:textAlignment="center"
@@ -72,7 +69,6 @@
                     android:min="50"
                     android:progress="100" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
