@@ -36,19 +36,21 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val SEEK_FORWARD: Int = 5000
+        private const val SEEK_BACKWARD: Int = 5000
+    }
+
+    private var mMediaPlayer: MediaPlayer? = null
+    private var mHandler = Handler()
+    private var adapter: PolluxAdapter<Song>? = null
+    private var SONG_POSITION = 0
+    private var SONGS_CACHE = ArrayList<Song>()
+    private var playbackParams = PlaybackParams()
     private var hasFinished = false
     private var currentSong: Song? = null
     private var currentSongId: String? = null
-    var mMediaPlayer: MediaPlayer? = null
-    var mHandler = Handler()
-    var adapter: PolluxAdapter<Song>? = null
     private var sv: SongsViewModel? = null
-
-    var SONG_POSITION = 0
-    var SONGS_CACHE = ArrayList<Song>()
-    var SEEK_FORWARD = 5000
-    var SEEK_BACKWARD = 5000
-    var playbackParams = PlaybackParams()
 
     private fun initializeViews() {
         songsRV!!.layoutManager = LinearLayoutManager(this)
