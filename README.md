@@ -17,7 +17,7 @@ Repea is a language learning app that allows users to practice speaking any lang
 The app lets you:
 - Access and play audio files on your phone
 - Adjust the speed to suit your speaking level
-- Record conversations from your favorite anime, television show, or movie to practice with (coming soon)
+- Record conversations from your favorite YouTube videos to practice with (coming soon)
 
 ## Screenshots
 [<img align="left" src="https://user-images.githubusercontent.com/86330277/137248493-bdfd52cd-8cb1-40cf-adcf-5ea34e9635ad.jpg" align="left"
